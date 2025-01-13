@@ -1,6 +1,6 @@
 # Hoppy Quest
 
-Bem-vindo ao **Hoppy Quest**, um jogo de aventura onde você controla um coelho azul que corre, pula e coleta moedas em um cenário encantador. Desafie-se a sobreviver, evitar inimigos e marcar a maior pontuação possível!
+Bem-vindo ao **Hoppy Quest**, um jogo de aventura onde você controla o Blue, um coelho azul que corre, pula e coleta moedas em um cenário encantador. Desafie-se a sobreviver, evitar inimigos e marcar a maior pontuação possível!
 
 ---
 ## 🎮 **Como Jogar**
@@ -8,7 +8,7 @@ Bem-vindo ao **Hoppy Quest**, um jogo de aventura onde você controla um coelho 
 - **Music**: Ativa ou desativa a música de fundo.
 - **Exit**: Encerra o jogo.
 
-No jogo, o coelho deve:
+No jogo, o coelho Blue deve:
 - **Mover-se para a esquerda e direita** usando as setas do teclado.
 - **Pular** usando a barra de espaço.
 - **Evitar inimigos** e **coletar moedas** para aumentar sua pontuação.
@@ -17,7 +17,7 @@ No jogo, o coelho deve:
 ## 🕹️ **Controles**
 - **Seta para Esquerda (←)**: Move o personagem para a esquerda.
 - **Seta para Direita (→)**: Move o personagem para a direita.
-- **Barra de Espaço**: Faz o personagem pular.
+- **Barra de Espaço**: Faz o Blue pular.
 
 ---
 ## 📦 **Instalação**
@@ -27,7 +27,7 @@ Certifique-se de que você tem o **Python** instalado em sua máquina.
 ### 🔧 **Passo 1: Clonar o Repositório**
 ```bash
 # Comando para clonar o repositório
-git clone https://github.com/seu-usuario/hoppy-quest.git
+git clone https://github.com/seu-usuario/HoppyQuestGame.git
 ```
 
 ### 🖥️ **Passo 2: Navegar até a Pasta do Projeto**
@@ -37,12 +37,7 @@ cd hoppy-quest
 
 ### ▶️ **Passo 3: Executar o Jogo**
 ```bash
-python jogo.py
-```
-
-Caso o comando acima não funcione, tente:
-```bash
-py jogo.py
+python jogo_HoppyQuest.py
 ```
 
 ---
