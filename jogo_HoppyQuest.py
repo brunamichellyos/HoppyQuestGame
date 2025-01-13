@@ -3,18 +3,18 @@ import pgzrun
 import random
 from pgzero.rect import Rect
 
-# Screen settings
+# definir tamanho da tela do jogo
 WIDTH = 800
 HEIGHT = 400
 
-# Background music
+# musica do fundo do jogo - background 
 if hasattr(music, 'play'):
     music.play('background')
 
-# Animation frames for right and left
-frames_right = [f'rabbitrun{i}_r' for i in range(8)]
-frames_left = [f'rabbitrun{i}_l' for i in range(8)]
-idle_frames = [f'idle_frame_{i}' for i in range(6)]  # Idle animation frames
+# Animacao dos frames do personagem
+frames_right = [f'rabbitrun{i}_r' for i in range(8)]  # direita
+frames_left = [f'rabbitrun{i}_l' for i in range(8)]   # esquerda
+idle_frames = [f'idle_frame_{i}' for i in range(6)]   # parado 
 
 # Character setup
 current_frame = 0
