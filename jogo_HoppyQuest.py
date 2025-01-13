@@ -7,9 +7,16 @@ from pgzero.rect import Rect
 WIDTH = 800
 HEIGHT = 400
 
+# variaveis globais
+LIVES = 3
+SCORE = 0
+
 # musica do fundo do jogo - background 
 if hasattr(music, 'play'):
     music.play('background')
+
+# Variable for music control
+music_on = True
 
 # Animacao dos frames do personagem
 frames_right = [f'rabbitrun{i}_r' for i in range(8)]  # direita
@@ -20,8 +27,6 @@ idle_frames = [f'idle_frame_{i}' for i in range(6)]   # parado
 current_frame = 0
 character = Actor(frames_right[0], (100, HEIGHT - 50))  # Adjust Y position to align with the ground
 speed = 5
-lives = 3  # Player lives
-score = 0  # Player score
 idle_speed = 0.2  # Idle animation speed
 
 # Background setup
@@ -48,9 +53,6 @@ coin_frames = [f"coin_{i}" for i in range(6)]
 coins = [Actor(coin_frames[0], (random.randint(WIDTH // 2, WIDTH), random.randint(50, HEIGHT - 50))) for _ in range(5)]
 current_coin_frame = 0
 coin_speed = 2
-
-# Variable for music control
-music_on = True
 
 # Jump variables
 is_jumping = False
@@ -90,16 +92,20 @@ def draw_menu():
 
 # Function to draw the game over screen
 def draw_game_over():
+    global SCORE
+
     screen.clear()
     gameover_background = Actor('gameover', (WIDTH / 2, HEIGHT / 2))
     gameover_background.draw()
-    screen.draw.text("Return to the main menu", center=(WIDTH / 2, 300), fontsize=30, color="black")
-    screen.draw.text(f"Score: {score}", center=(WIDTH / 2, 350), fontsize=50, color="black")
+    screen.draw.text("Voltar ao menu", center=(WIDTH / 2, 300), fontsize=30, color="black")
+    screen.draw.text(f"Score: {SCORE}", center=(WIDTH / 2, 350), fontsize=50, color="black")
 
 # Function to switch between menu and game
 menu_active = True
 
 def draw():
+    global LIVES, SCORE
+
     if game_over:
         draw_game_over()
     elif menu_active:
@@ -113,12 +119,14 @@ def draw():
             enemy.draw()
         for coin in coins:
             coin.draw()
-        screen.draw.text(f"Lives: {lives}", (10, 10), fontsize=30, color="white")
-        screen.draw.text(f"Score: {score}", (10, 40), fontsize=30, color="white")
+        screen.draw.text(f"Sair: ESC", center=(WIDTH / 2, 15), fontsize=20, color="white")
+        screen.draw.text(f"Lives: {LIVES}", (10, 30), fontsize=30, color="white")
+        screen.draw.text(f"Score: {SCORE}", (10, 60), fontsize=30, color="white")
+
 
 # Function to update movement and animation
 def update():
-    global current_frame, menu_active, music_on, is_jumping, jump_velocity, gravity, jump_count, current_enemy_frame, spawn_timer, lives, current_coin_frame, score, game_over, enemy_frame_speed, enemy_frame_counter
+    global current_frame, menu_active, music_on, is_jumping, jump_velocity, gravity, jump_count, current_enemy_frame, spawn_timer, LIVES, SCORE, current_coin_frame, game_over, enemy_frame_speed, enemy_frame_counter
 
     if menu_active or game_over:
         return
@@ -167,7 +175,7 @@ def update():
     if spawn_timer > random.randint(50, 100):
         spawn_timer = 0
         if len(enemies) < 1:
-            enemy = Actor(enemy_frames[0], (WIDTH + random.randint(100, 300), HEIGHT - 60))
+            enemy = Actor(enemy_frames[0], (WIDTH + random.randint(100, 300), HEIGHT - 45))
             enemies.append(enemy)
 
     # Enemy movement and animation
@@ -185,11 +193,11 @@ def update():
 
         # Check for collision with the character
         if character.colliderect(enemy):
-            lives -= 1
+            LIVES -= 1
             enemies.remove(enemy)
             if music_on and hasattr(sounds, 'point_loss'):
                 sounds.point_loss.play()
-            if lives <= 0:
+            if LIVES <= 0:
                 game_over = True
                 music.stop()
                 if music_on and hasattr(sounds, 'game_over'):
@@ -207,12 +215,36 @@ def update():
 
         # Check for collision with the character
         if character.colliderect(coin):
-            score += 1
+            SCORE += 1
             coins.remove(coin)
             if music_on and hasattr(sounds, 'point_win'):
                 sounds.point_win.play()  # Play point loss sound from music folder            
             new_coin = Actor(coin_frames[0], (WIDTH + random.randint(50, 200), random.randint(50, HEIGHT - 50)))
             coins.append(new_coin)
+
+# funcao para resetar o jogo
+def reset_game():
+    global LIVES, SCORE, enemies, coins, character, is_jumping, jump_velocity, jump_count, music_on
+
+    # Reset enemies and coins
+    enemies.clear()
+    coins.clear()
+    LIVES = 3
+    SCORE = 0
+
+    # Recreate initial coins
+    coins.extend([Actor(coin_frames[0], (random.randint(WIDTH // 2, WIDTH), random.randint(50, HEIGHT - 50))) for _ in range(5)])
+
+    # Reset character position and jump state
+    character.pos = (100, HEIGHT - 50)
+    is_jumping = False
+    jump_velocity = -20
+    jump_count = 0
+
+    # iniciar a musica de fundo
+    if music_on and hasattr(music, 'play'):
+        music.play('background')
+
 
 # Function to capture mouse clicks in the main menu or game over screen
 def on_mouse_down(pos):
@@ -221,6 +253,7 @@ def on_mouse_down(pos):
     if game_over:
         game_over = False
         menu_active = True
+        reset_game()  # Reset game variables when returning to the menu
     elif menu_active:
         if Rect((WIDTH / 2 - 100, 250), (200, 50)).collidepoint(pos):
             menu_active = False
@@ -236,6 +269,10 @@ def on_mouse_down(pos):
 def on_key_down(key):
     global is_jumping, jump_velocity, jump_count, max_jumps
 
+    # Sair do jogo ao pressionar ESC
+    if key == keys.ESCAPE:
+        exit()
+    
     if key == keys.SPACE:
         if jump_count < max_jumps:
             is_jumping = True
