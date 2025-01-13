@@ -1,4 +1,4 @@
-# Hoppy Quest - README
+# Hoppy Quest
 
 Bem-vindo ao **Hoppy Quest**, um jogo de aventura onde você controla um coelho azul que corre, pula e coleta moedas em um cenário encantador. Desafie-se a sobreviver, evitar inimigos e marcar a maior pontuação possível!
 
